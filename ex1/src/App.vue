@@ -1,10 +1,21 @@
 <template>
+  <div class="black-bg" v-if="modal_open == true">
+    <div class="white-bg">
+      <h4>상세페이지</h4>
+      <p>상세페이지 내용</p>
+      <button @click="modal_open = false">닫기</button>
+    </div>
+  </div>
+
   <div class="menu">
     <a v-for="(m, i) in menus" :key="i">{{ m }}</a>
   </div>
   <div v-for="(pd, i) in products" :key="i">
-    <h4 :style="스타일">{{ pd }}</h4>
+    <img :src="require('./assets/room' + i + '.jpg')" class="img_style" />
+    <h4 @click="modal_open = true" :style="스타일">{{ pd }}</h4>
     <p>{{ price[i] }} 만원</p>
+    <button @click="increase(i)">허위매물신고</button>
+    <span>신고수 : {{ 신고수[i] }}</span>
   </div>
   <div>
     <p>{{ db }}하는 이유</p>
@@ -14,6 +25,14 @@
     <p>Vue의 HTML 반복문 &lt;태그 v-for="작명 in 몇회"&gt;</p>
     <p>Vue의 HTML 반복문을 사용할 때 :key=""를 꼭 사용해야함</p>
     <p>:key=""는 반복문을 돌린 요소를 컴퓨터가 구분하기 위해 사용</p>
+    <p>버튼 클릭시 함수 실행은 v-on:click="", @click=""</p>
+    <p>Vue에서 함수를 만들고 싶으면 methods:{함수(){}}안에 생성</p>
+    <p>이미지를 불러오지 못할 때 이미지경로를 require()안에 넣어줌</p>
+    <p>동적인 UI 만드는 법</p>
+    <p>0. HTML CSS로 미리 디자인함</p>
+    <p>1. UI의 현재 상태를 데이터로 저장해둠</p>
+    <p>2. 데이터에 따라 UI가 어떻게 보일지 작성</p>
+    <p>v-if="조건식" : 조건식이 참일 때만 HTML을 보여줌</p>
   </div>
 </template>
 
@@ -22,6 +41,8 @@ export default {
   name: "App",
   data() {
     return {
+      modal_open: false,
+      신고수: [0, 0, 0],
       price: [60, 70, 80],
       db: "{{데이터바인딩}}",
       스타일: "color : blue",
@@ -29,11 +50,36 @@ export default {
       menus: ["Home", "Shop", "about"],
     };
   },
+  methods: {
+    increase(i) {
+      this.신고수[i]++;
+    },
+  },
   components: {},
 };
 </script>
 
 <style>
+body {
+  margin: 0;
+}
+div {
+  box-sizing: border-box;
+}
+.black-bg {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  padding: 20px;
+}
+.white-bg {
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -51,5 +97,10 @@ export default {
 .menu a {
   color: white;
   padding: 10px;
+}
+
+.img_style {
+  width: 100%;
+  margin-top: 40px;
 }
 </style>
