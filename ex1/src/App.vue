@@ -1,12 +1,4 @@
 <template>
-  <div class="black-bg" v-if="modal_open == true">
-    <div class="white-bg">
-      <h4>상세페이지</h4>
-      <p>상세페이지 내용</p>
-      <button @click="modal_open = false">닫기</button>
-    </div>
-  </div>
-
   <div class="menu">
     <a v-for="(m, i) in menus" :key="i">{{ m }}</a>
   </div>
@@ -17,6 +9,20 @@
     <button @click="increase(i)">허위매물신고</button>
     <span>신고수 : {{ 신고수[i] }}</span>
   </div>
+
+  <div v-for="(d, i) in onerooms" :key="i">
+    <img :src="d.image" class="img_style" />
+    <h4 @click="openmodal(i)">{{ d.title }}</h4>
+    <p>{{ d.price }} 원</p>
+    <div class="black-bg" v-if="modal_open[i] == true">
+      <div class="white-bg">
+        <h4>{{ d.title }}</h4>
+        <p>{{ d.content }}</p>
+        <button @click="modal_open[i] = false">닫기</button>
+      </div>
+    </div>
+  </div>
+
   <div>
     <p>{{ db }}하는 이유</p>
     <p>HTML에 하드코딩해놓으면 나중에 변경이 어려움</p>
@@ -37,12 +43,15 @@
 </template>
 
 <script>
+import oneroom_data from "./post.js";
+
 export default {
   name: "App",
   data() {
     return {
-      modal_open: false,
-      신고수: [0, 0, 0],
+      onerooms: oneroom_data,
+      modal_open: [false, false, false, false, false],
+      신고수: [0, 0, 0, 0, 0],
       price: [60, 70, 80],
       db: "{{데이터바인딩}}",
       스타일: "color : blue",
@@ -53,6 +62,9 @@ export default {
   methods: {
     increase(i) {
       this.신고수[i]++;
+    },
+    openmodal(i) {
+      this.modal_open[i] = true;
     },
   },
   components: {},
