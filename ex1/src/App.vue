@@ -14,11 +14,12 @@
     <img :src="d.image" class="img_style" />
     <h4 @click="openmodal(i)">{{ d.title }}</h4>
     <p>{{ d.price }} 원</p>
-    <div class="black-bg" v-if="modal_open[i] == true">
+    <div class="black-bg" v-if="d.open == true">
       <div class="white-bg">
         <h4>{{ d.title }}</h4>
         <p>{{ d.content }}</p>
-        <button @click="modal_open[i] = false">닫기</button>
+        <p>{{ d.price }} 원</p>
+        <button @click="openmodal(i)">닫기</button>
       </div>
     </div>
   </div>
@@ -50,7 +51,6 @@ export default {
   data() {
     return {
       onerooms: oneroom_data,
-      modal_open: [false, false, false, false, false],
       신고수: [0, 0, 0, 0, 0],
       price: [60, 70, 80],
       db: "{{데이터바인딩}}",
@@ -64,7 +64,12 @@ export default {
       this.신고수[i]++;
     },
     openmodal(i) {
-      this.modal_open[i] = true;
+      if (this.onerooms[i].open == false) {
+        this.onerooms[i].open = true;
+      } else {
+        this.onerooms[i].open = false;
+      }
+      console.log(this.onerooms[i].open);
     },
   },
   components: {},
@@ -84,12 +89,14 @@ div {
   background: rgba(0, 0, 0, 0.5);
   position: fixed;
   padding: 20px;
+  top: 0;
 }
 .white-bg {
-  width: 100%;
+  width: 60%;
   background: white;
   border-radius: 8px;
   padding: 20px;
+  margin: auto;
 }
 
 #app {
